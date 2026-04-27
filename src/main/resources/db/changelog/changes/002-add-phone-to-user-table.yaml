@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet: 
+      id: 002-add-phone-to-user-table
+      author: Minh
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: phone
+                  type: VARCHAR(15)
+                  constraints:
+                    nullable: true
+        - createIndex:
+            indexName: idx_users_phone
+            tableName: users
+            columns:
+              - column:
+                  name: phone
+        - createIndex:
+            indexName: idx_users_email
+            tableName: users
+            columns:
+              - column:
+                  name: email
+      rollback:
+        - dropIndex:
+            indexName: idx_users_phone
+            tableName: users
+        - dropIndex:
+            indexName: idx_users_email
+            tableName: users
+        - dropColumn:
+            tableName: users
+            columnName: phone
