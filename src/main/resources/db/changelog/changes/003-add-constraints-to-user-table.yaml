@@ -7,18 +7,6 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: username
-                  type: VARCHAR(50)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: email
-                  type: VARCHAR(50)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
                   name: password_hash
                   type: VARCHAR(255)
                   constraints:
@@ -32,3 +20,13 @@ databaseChangeLog:
                   name: updated_at
                   type: DATETIME
                   defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropColumn:
+            tableName: users
+            columnName: password_hash
+        - dropColumn:
+            tableName: users
+            columnName: status
+        - dropColumn:
+            tableName: users
+            columnName: updated_at
