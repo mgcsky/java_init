@@ -1,14 +1,18 @@
 package com.example.demo.user.application;
 
+import com.example.demo.common.constants.ErrorCode;
+import com.example.demo.common.constants.MessageKey;
 import com.example.demo.common.error.ConflictException;
 import com.example.demo.user.api.v1.dto.RegisterRequest;
 import com.example.demo.user.api.v1.dto.RegisterResponse;
 import com.example.demo.user.domain.User;
+import com.example.demo.user.domain.UserField;
 import com.example.demo.user.infrastructure.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -23,10 +27,22 @@ public class UserService {
 
     public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new ConflictException("Email already exists");
+            throw new ConflictException(
+                    ErrorCode.USER_EMAIL_EXISTS,
+                    MessageKey.USER_EMAIL_EXISTS,
+                    UserField.EMAIL.value());
         }
         if (userRepository.existsByUsername(request.username())) {
-            throw new ConflictException("Username already exists");
+            throw new ConflictException(
+                    ErrorCode.USERNAME_EXISTS,
+                    MessageKey.USERNAME_EXISTS,
+                    UserField.USERNAME.value());
+        }
+        if (userRepository.existsByPhone(request.phone())) {
+            throw new ConflictException(
+                    ErrorCode.USER_PHONE_EXISTS,
+                    MessageKey.USER_PHONE_EXISTS,
+                    UserField.PHONE.value());
         }
 
         String hashedPassword = passwordEncoder.encode(request.password());

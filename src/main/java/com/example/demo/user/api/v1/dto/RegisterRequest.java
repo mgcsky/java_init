@@ -7,8 +7,20 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public record RegisterRequest(
-        @NotBlank @Length(min = 6, max = 100, message = "Username should be 6 to 100 character") String username,
-        @NotBlank @Length(min = 0, max = 100, message = "Email should be upto 100 character") @Email String email,
-        @NotBlank @Length(min = 0, max = 100, message = "Email should be upto 100 character") String password,
-        @NotBlank @Length(min = 0, max = 14, message = "Email should be upto 14 character") String phone
-        ) {}
+        @NotBlank(message = "Username is required")
+        @Length(min = 6, max = 100, message = "Username must be 6 to 100 characters")
+        String username,
+
+        @NotBlank(message = "Email is required")
+        @Length(max = 100, message = "Email must be at most 100 characters")
+        @Email(message = "Email format is invalid")
+        String email,
+
+        @NotBlank(message = "Password is required")
+        @Length(min = 8, max = 100, message = "Password must be 8 to 100 characters")
+        String password,
+
+        @NotBlank(message = "Phone is required")
+        @Length(max = 14, message = "Phone must be at most 14 characters")
+        String phone
+) {}

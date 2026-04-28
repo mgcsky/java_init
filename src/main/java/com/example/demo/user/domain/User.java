@@ -31,6 +31,10 @@ public class User {
     @Column(name = "password_hash", nullable = false, length = 100)
     private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = true, length = 50)
+    private UserStatus status;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -50,23 +54,36 @@ public class User {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
+
+        if (status == null) {
+            status = UserStatus.INITIATED;
+        }
     }
 
     public Long getId() {
         return id;
     }
+
     public String getUsername() {
         return username;
     }
+
     public String getEmail() {
         return email;
     }
+
     public String getPhone() {
         return phone;
     }
+
     public String getPasswordHash() {
         return passwordHash;
     }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
