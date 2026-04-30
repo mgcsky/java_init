@@ -8,6 +8,7 @@ import com.example.demo.user.api.v1.dto.RegisterResponse;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserField;
 import com.example.demo.user.infrastructure.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class UserService {
 
     public final UserRepository userRepository;
     public final BCryptPasswordEncoder passwordEncoder;
+    public final UserConstraintViolationMapper userConstraintViolationMapper = new UserConstraintViolationMapper();
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -26,6 +28,7 @@ public class UserService {
     }
 
     public RegisterResponse register(RegisterRequest request) {
+
         if (userRepository.existsByEmail(request.email())) {
             throw new ConflictException(
                     ErrorCode.USER_EMAIL_EXISTS,
@@ -45,22 +48,28 @@ public class UserService {
                     UserField.PHONE.value());
         }
 
-        String hashedPassword = passwordEncoder.encode(request.password());
+        try {
+            String hashedPassword = passwordEncoder.encode(request.password());
 
-        User user = new User(
-                request.username(),
-                request.email(),
-                request.phone(),
-                hashedPassword
-        );
+            User user = new User(
+                    request.username(),
+                    request.email(),
+                    request.phone(),
+                    hashedPassword
+            );
 
-        User savedUser = userRepository.save(user);
+            User savedUser = userRepository.saveAndFlush(user);
 
-        return new RegisterResponse(
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
-                savedUser.getPhone(),
-                savedUser.getCreatedAt());
+            return new RegisterResponse(
+                    savedUser.getId(),
+                    savedUser.getUsername(),
+                    savedUser.getEmail(),
+                    savedUser.getPhone(),
+                    savedUser.getCreatedAt());
+
+        } catch (DataIntegrityViolationException ex) {
+            throw userConstraintViolationMapper.parseToConflictException(ex);
+        }
+
     }
 }

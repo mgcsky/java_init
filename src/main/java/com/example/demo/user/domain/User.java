@@ -1,6 +1,10 @@
 package com.example.demo.user.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +16,9 @@ import java.time.LocalDateTime;
                 @Index(name = "idx_users_email", columnList = "email")
         }
 )
-
+@Getter
+@Builder
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -74,10 +80,6 @@ public class User {
 
     public String getPhone() {
         return phone;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
     }
 
     public UserStatus getStatus() {

@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: Minh
+      changes:
+        - createTable:
+            tableName: fare_histories
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_id
+              - column:
+                  name: fare
+                  type: DECIMAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: DATETIME
+                  constraints:
+                    nullable: true
+              - column:
+                  name: deleted_at
+                  type: DATETIME
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropTable:
+            tableName: fare_histories
+

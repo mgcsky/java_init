@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0
+      author: Minh
+      changes:
+        - addNotNullConstraint:
+            tableName: users
+            columnDataType: VARCHAR(150)
+            columnName: email
+        - addNotNullConstraint:
+            tableName: users
+            columnDataType: VARCHAR(15)
+            columnName: phone
