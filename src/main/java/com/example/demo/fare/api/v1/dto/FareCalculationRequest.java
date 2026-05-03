@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-public record FareRequest (
+public record FareCalculationRequest(
     @NotNull @DecimalMin("0.0") BigDecimal baseFare,
     @NotNull @Min(0) Integer distanceKm,
     @NotNull @Min(0) Integer waitingMinutes,

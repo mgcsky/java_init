@@ -1,6 +1,5 @@
 package com.example.demo.fare.domain;
 
-import com.example.demo.fare.application.FareServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

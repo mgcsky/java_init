@@ -2,6 +2,7 @@ package com.example.demo.user.infrastructure;
 
 import com.example.demo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 

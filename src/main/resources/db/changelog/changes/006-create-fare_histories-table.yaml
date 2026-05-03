@@ -18,10 +18,9 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_user_id
               - column:
                   name: fare
-                  type: DECIMAL
+                  type: DECIMAL(19, 2)
                   constraints:
                     nullable: false
               - column:

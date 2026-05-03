@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(
         name = "users",
-        indexes = {
-                @Index(name = "idx_users_phone", columnList = "phone"),
-                @Index(name = "idx_users_email", columnList = "email")
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_users_username", columnNames = "username"),
+                @UniqueConstraint(name = "uk_users_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_users_phone", columnNames = "phone")
         }
 )
 @Getter
@@ -64,29 +65,5 @@ public class User {
         if (status == null) {
             status = UserStatus.INITIATED;
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }
