@@ -11,17 +11,21 @@ import org.springframework.stereotype.Service;
 public class FareCalculationService {
 
     private static final Logger log = LoggerFactory.getLogger(FareCalculationService.class);
-    private final FareCalculator fareCalculator = new FareCalculator();
+    private final FareCalculator fareCalculator;
 
-    public FareCalculationResponse calculate(FareCalculationRequest fareCalculationRequest) {
+    public FareCalculationService (FareCalculator fareCalculator) {
+        this.fareCalculator = fareCalculator;
+    }
+
+    public FareCalculationResult calculate(FareCalculationCommand fareCalculationRequest) {
         var calculationResult = fareCalculator.calculate(
-                fareCalculationRequest.baseFare(),
-                fareCalculationRequest.distanceKm(),
-                fareCalculationRequest.waitingMinutes(),
-                fareCalculationRequest.surcharge()
+                fareCalculationRequest.getBaseFare(),
+                fareCalculationRequest.getDistanceKm(),
+                fareCalculationRequest.getWaitingMinutes(),
+                fareCalculationRequest.getSurcharge()
         );
 
-        return new FareCalculationResponse(
+        return new FareCalculationResult(
                 calculationResult.subtotal(),
                 calculationResult.tax(),
                 calculationResult.total()

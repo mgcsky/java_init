@@ -2,10 +2,12 @@ package com.example.demo.fare.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Component
 public class FareCalculator {
 
     private static final Logger log = LoggerFactory.getLogger(FareCalculator.class);

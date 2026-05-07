@@ -1,6 +1,8 @@
 package com.example.demo.fare.api.v1;
 
 import com.example.demo.fare.api.v1.dto.*;
+import com.example.demo.fare.api.v1.mapper.FareRestMapper;
+import com.example.demo.fare.application.FareCalculationResult;
 import com.example.demo.fare.application.FareCalculationService;
 import com.example.demo.fare.application.FareHistoryService;
 import jakarta.validation.Valid;
@@ -17,24 +19,31 @@ import java.math.BigDecimal;
 public class FareController {
 
     private static final Logger log = LoggerFactory.getLogger(FareController.class);
+    private final FareRestMapper fareRestMapper;
 
     private final FareCalculationService fareCalculationService;
     private final FareHistoryService fareHistoryService;
 
-    public FareController(FareCalculationService fareCalculationService, FareHistoryService fareHistoryService) {
+    public FareController(
+            FareCalculationService fareCalculationService,
+            FareHistoryService fareHistoryService,
+            FareRestMapper fareRestMapper
+    ) {
         this.fareCalculationService = fareCalculationService;
         this.fareHistoryService = fareHistoryService;
+        this.fareRestMapper = fareRestMapper;
     }
 
     @PostMapping("/calculate")
     public ResponseEntity<FareCalculationResponse> calculate(@Valid @RequestBody FareCalculationRequest fareCalculationRequest) {
-        log.info("Fare calculate request received: {}", fareCalculationRequest);
+        FareCalculationResult response = fareCalculationService
+                .calculate(
+                        fareRestMapper.toCommand(fareCalculationRequest)
+                );
 
-        FareCalculationResponse response = fareCalculationService.calculate(fareCalculationRequest);
-
-        log.info("Fare calculate request response: {}", fareCalculationRequest);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                fareRestMapper.toResponse(response)
+        );
     }
 
     @PostMapping("/records")

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package demo.fare.v1;
+
+option java_multiple_files = true;
+option java_package = "com.example.demo.grpc.fare.v1";
+option java_outer_classname = "FareServiceProto";
+
+service FareService {
+  rpc Calculate(CalculateFareRequest) returns (CalculateFareResponse);
+}
+
+message CalculateFareRequest {
+  string base_fare = 1;
+  int32 distance_km = 2;
+  int32 waiting_minutes = 3;
+  string surcharge = 4;
+}
+
+message CalculateFareResponse {
+  string subtotal = 1;
+  string tax = 2;
+  string total = 3;
+}

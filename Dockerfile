@@ -1,4 +1,5 @@
-FROM gradle:9.4.1-jdk21-alpine AS build
+# Build stage: dùng debian (glibc) để tránh lỗi protoc-gen-grpc
+FROM gradle:9.4.1-jdk21 AS build
 WORKDIR /workspace
 
 COPY settings.gradle build.gradle ./
@@ -7,6 +8,7 @@ RUN gradle --no-daemon dependencies
 COPY src src
 RUN gradle --no-daemon clean bootJar -x test
 
+# Runtime stage: vẫn giữ Alpine nhẹ
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
